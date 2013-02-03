@@ -6,7 +6,7 @@ $(call inherit-product, vendor/cm/config/cdma.mk)
 $(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
 
 # Inherit device configuration
-$(call inherit-product, device/htc/fireball/device_fireball.mk)
+$(call inherit-product, device/htc/dlx/device_dlx.mk)
 
 # Device naming
 PRODUCT_DEVICE := dlx
