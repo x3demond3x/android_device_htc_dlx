@@ -102,4 +102,3 @@ BOARD_HAVE_LOW_LATENCY_AUDIO := true
 
 -include vendor/htc/dlx/BoardConfigVendor.mk
 
-BOARD_HAS_NO_SELECT_BUTTON := true
