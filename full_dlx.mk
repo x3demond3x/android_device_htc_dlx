@@ -23,7 +23,7 @@ PRODUCT_COPY_FILES := device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-PRODUCT_NAME := full_dlx
+PRODUCT_NAME := dlx
 PRODUCT_DEVICE := dlx
 PRODUCT_BRAND := HTC
 PRODUCT_MODEL := Droid DNA
