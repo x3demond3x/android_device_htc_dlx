@@ -1,4 +1,5 @@
-# Copyright (C) 2009 The Android Open Source Project
+#
+# Copyright (C) 2011 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,79 +12,97 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-#
-# This file sets variables that control the way modules are built
-# thorughout the system. It should not be used to conditionally
-# disable makefiles (the proper mechanism to control what gets
-# included in a build is to use PRODUCT_PACKAGES in a product
-# definition file).
 #
 
-# WARNING: This line must come *before* including the proprietary
-# variant, so that it gets overwritten by the parent (which goes
-# against the traditional rules of inheritance).
-
-# inherit from common msm8960
--include device/htc/msm8960-common/BoardConfigCommon.mk
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_SMP := true
+TARGET_ARCH := arm
+TARGET_ARCH_VARIANT := armv7-a-neon
+ARCH_ARM_HAVE_TLS_REGISTER := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := dlx
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_HAS_LARGE_FILESYSTEM := true
 
-# Kernel
-BOARD_KERNEL_BASE := 0x80400000
+#Kernel
+BOARD_KERNEL_BASE := 0x80600000
 BOARD_KERNEL_PAGE_SIZE := 2048
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8
-BOARD_FORCE_RAMDISK_ADDRESS := 0x81800000
-
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=dlx user_debug=31  
+BOARD_FORCE_RAMDISK_ADDRESS := 0x81a08000
+TARGET_KERNEL_VERSION := 3.4
+TARGET_KERNEL_CONFIG := dlx_defconfig
+TARGET_KERNEL_SOURCE := kernel/htc/dlx-$(TARGET_KERNEL_VERSION)
 TARGET_PREBUILT_KERNEL := device/htc/dlx/prebuilt/kernel
-TARGET_KERNEL_CONFIG := monarudo_defconfig
 
-# Use libril in the device tree
-BOARD_PROVIDES_LIBRIL := true
+# Try to build the kernel
+TARGET_KERNEL_CONFIG := mako_defconfig
 
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
+BOARD_USES_ALSA_AUDIO:= true
+BOARD_USES_FLUENCE_INCALL := true
+BOARD_USES_SEPERATED_AUDIO_INPUT := true
 
-# QCOM GPS
-#BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := dlx
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+BLUETOOTH_HCI_USE_MCT := true
 
-# Lights
-TARGET_PROVIDES_LIBLIGHTS := true
+TARGET_NO_RADIOIMAGE := true
+TARGET_BOARD_PLATFORM := msm8960
+TARGET_BOOTLOADER_BOARD_NAME := DLX
+TARGET_BOOTLOADER_NAME=dlx
+TARGET_BOARD_INFO_FILE := device/htc/dlx/board-info.txt
 
-# USB
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/dlx/bluetooth
 
-# Wifi
-WIFI_DRIVER_MODULE_NAME          := bcmdhd
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/bcmdhd.ko"
+# FIXME: HOSTAPD-derived wifi driver
+BOARD_HAS_QCOM_WLAN := true
+BOARD_WLAN_DEVICE := qcwcn
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_FW_PATH_AP  := "ap"
 
-# cat /proc/emmc
-#dev:        size     erasesize name
-#mmcblk0p21: 000ffa00 00000200 "misc"
-#mmcblk0p20: 00fffe00 00000200 "recovery"
-#mmcblk0p19: 01000000 00000200 "boot"
-#mmcblk0p32: 67fffc00 00000200 "system"
-#mmcblk0p28: 00140200 00000200 "local"
-#mmcblk0p33: 0ffffe00 00000200 "cache"
-#mmcblk0p34: 97fffe00 00000200 "userdata"
-#mmcblk0p24: 01400000 00000200 "devlog"
-#mmcblk0p26: 00040000 00000200 "pdata"
-#mmcblk0p29: 00010000 00000200 "extra"
-#mmcblk0p16: 02d00000 00000200 "radio"
-#mmcblk0p17: 00a00000 00000200 "adsp"
-#mmcblk0p15: 00100000 00000200 "dsps"
-#mmcblk0p18: 007ffa00 00000200 "radio_config"
-#mmcblk0p22: 00400000 00000200 "modem_st1"
-#mmcblk0p23: 00400000 00000200 "modem_st2"
-#mmcblk0p30: 00100000 00000200 "cdma_record"
-#mmcblk0p31: 06069e00 00000200 "reserve"
+BOARD_EGL_CFG := device/htc/dlx/egl.cfg
+
+#BOARD_USES_HGL := true
+#BOARD_USES_OVERLAY := true
+USE_OPENGL_RENDERER := true
+TARGET_USES_ION := true
+TARGET_USES_OVERLAY := true
+TARGET_USES_SF_BYPASS := true
+TARGET_USES_C2D_COMPOSITION := true
+
 
 TARGET_USERIMAGES_USE_EXT4 := true
-BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16776704
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1744829440
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 2550136320
-BOARD_FLASH_BLOCK_SIZE := 131072
-BOARD_VOLD_MAX_PARTITIONS := 36
+BOARD_BOOTIMAGE_PARTITION_SIZE := 23068672 # 22M
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 23068672 # 22M
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 880803840 # 840M
+
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 6189744128 # 5.9G
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+
+BOARD_USES_SECURE_SERVICES := true
+
+BOARD_USES_EXTRA_THERMAL_SENSOR := true
+BOARD_USES_CAMERA_FAST_AUTOFOCUS := true
+
+BOARD_LIB_DUMPSTATE := libdumpstate.mako
+
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
+TARGET_NO_RPC := true
+
+TARGET_RELEASETOOLS_EXTENSIONS := device/htc/dlx
+
+BOARD_CHARGER_ENABLE_SUSPEND := true
+
+BOARD_HAVE_LOW_LATENCY_AUDIO := true
+
+-include vendor/htc/dlx/BoardConfigVendor.mk
+
+BOARD_HAS_NO_SELECT_BUTTON := true
