@@ -16,7 +16,7 @@ $(call inherit-product, device/htc/dlx/full_dlx.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := dlx
-PRODUCT_NAME := cm_dlx
+PRODUCT_NAME := dlx
 PRODUCT_BRAND := HTC
 PRODUCT_MODEL := Droid DNA
 PRODUCT_MANUFACTURER := HTC
